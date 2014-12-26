@@ -1,0 +1,10 @@
+---
+:slack_webhook: '<%= @slack_webhook %>'
+:slack_channel: '<%= @slack_channel %>'
+:slack_username: '<%= @slack_username %>'
+:slack_icon_url: '<%= @slack_icon_url %>'
+:slack_statuses:
+<% @slack_statuses.each do |status| -%>
+  - <%= status %>
+<% end -%>
+:foreman_api_host: '<%= @foreman_api_host %>'
