@@ -1,4 +1,4 @@
-slack {
+class { 'slack':
   slack_webhook => 'INSERT_WEBHOOK',
   slack_channel => '#puppet',
   slack_username => 'Puppet',
