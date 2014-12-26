@@ -1,3 +1,15 @@
+# Class: slack
+#
+# This module manages slack
+#
+# Parameters:
+#
+# Actions:
+#
+# Requires:
+#
+# Sample Usage:
+#
 class slack (
   $slack_webhook = undef,
   $slack_channel = '#puppet',

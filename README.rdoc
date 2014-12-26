@@ -1,0 +1,5 @@
+= puppet-slack module
+
+{<img src='https://codex.cegeka.be/jenkins/job/puppet-slack/badge/icon' />}[https://codex.cegeka.be/jenkins/job/puppet-slack/]
+
+This is the slack module.
