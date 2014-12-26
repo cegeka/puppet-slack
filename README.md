@@ -19,14 +19,14 @@ Installation & Usage
 
 4. Add the class to the puppet master node:
 
-    class { 'slack':
-      slack_webhook    => 'YOUR_SLACK_WEBHOOK',
-      slack_channel    => '#puppet',
-      slack_username   => 'Puppet',
-      slack_icon_url   => 'https://pbs.twimg.com/profile_images/3672925108/954f7381089ac290b4690c5ffd9dd7d3.png',
-      slack_statuses   => ['changed', 'failed'],
-      foreman_api_host => 'YOUR_FOREMAN_HOST'
-    }
+        class { 'slack':
+          slack_webhook    => 'YOUR_SLACK_WEBHOOK',
+          slack_channel    => '#puppet',
+          slack_username   => 'Puppet',
+          slack_icon_url   => 'https://pbs.twimg.com/profile_images/3672925108/954f7381089ac290b4690c5ffd9dd7d3.png',
+          slack_statuses   => ['changed', 'failed'],
+          foreman_api_host => 'YOUR_FOREMAN_HOST'
+        }
 
 5.  Enable pluginsync and reports on your master and clients in `puppet.conf`
 
