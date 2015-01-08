@@ -9,15 +9,11 @@ A Puppet report handler for sending notifications of Puppet runs to [Slack](http
 Installation & Usage
 --------------------
 
-1.  Install the `slack-notifier` gem on your Puppet master
+1.  Install puppet-slack as a module in your Puppet master's module path.
 
-        $ sudo gem install slack-notifier
+2.  Create a Slack Incoming Webhooks integration and copy the URL that is generated.
 
-2.  Install puppet-slack as a module in your Puppet master's module path.
-
-3.  Create a Slack Incoming Webhooks integration and copy the URL that is generated.
-
-4. Add the class to the puppet master node:
+3. Add the class to the puppet master node:
 
         class { 'slack':
           slack_webhook    => 'YOUR_SLACK_WEBHOOK',
@@ -28,7 +24,7 @@ Installation & Usage
           foreman_api_host => 'YOUR_FOREMAN_HOST'
         }
 
-5.  Enable pluginsync and reports on your master and clients in `puppet.conf`
+4.  Enable pluginsync and reports on your master and clients in `puppet.conf`
 
         [master]
           report = true
@@ -38,9 +34,9 @@ Installation & Usage
           report = true
           pluginsync = true
 
-6.  Run the Puppet client and sync the report as a plugin
+5.  Run the Puppet client and sync the report as a plugin
 
-7.  To temporarially disable Slack notifications add a file named 'slack_disabled' in the same path as slack.yaml.
+6.  To temporarially disable Slack notifications add a file named 'slack_disabled' in the same path as slack.yaml.
 	(Removing it will re-enable notifications)
 
 		$ touch /etc/puppet/slack_disabled
