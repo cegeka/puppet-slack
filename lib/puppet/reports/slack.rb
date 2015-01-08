@@ -5,12 +5,6 @@ require 'puppet'
 require 'uri'
 require 'yaml'
 
-begin
-  require 'slack-notifier'
-rescue LoadError => e
-  Puppet.info "You need the `slack-notifier` gem to use the Slack report"
-end
-
 Puppet::Reports.register_report(:slack) do
 
   configfile = File.join([File.dirname(Puppet.settings[:config]), "slack.yaml"])
@@ -39,7 +33,7 @@ Puppet::Reports.register_report(:slack) do
       Puppet.info "Sending status for #{self.host} to Slack channel #{SLACK_CHANNEL}"
 
       msg = "Puppet run executed on #{self.host} with status `#{self.status}` at #{Time.now.asctime}"
-      report_note = {}
+      attachments = []
 
       status_color = case self.status
                      when 'failed' then '#D00000'
@@ -60,18 +54,33 @@ Puppet::Reports.register_report(:slack) do
 
         json = JSON.parse(@data)
         reportid = json['report']['id']
+
         msg = "Puppet run executed on <#{FOREMAN_API_HOST}/hosts/#{self.host}|#{self.host}> "
         msg += "with status `#{self.status}` at #{Time.now.asctime}"
-        report_note = {
-          text: "<#{FOREMAN_API_HOST}/reports/#{reportid}|View Report>",
-          color: status_color
-        }
+        attachments = [
+          {
+            "fallback" => "<#{FOREMAN_API_HOST}/reports/#{reportid}|View Report>",
+            "text" => "<#{FOREMAN_API_HOST}/reports/#{reportid}|View Report>",
+            "color" => status_color
+          }
+        ]
       end
 
-      notifier = Slack::Notifier.new SLACK_WEBHOOK
-      notifier.channel  = SLACK_CHANNEL
-      notifier.username = SLACK_USERNAME
-      notifier.ping msg, icon_url: ICON_URL, attachments: [report_note]
+      payload = {
+        "channel" => SLACK_CHANNEL,
+        "username" => SLACK_USERNAME,
+        "text" => msg,
+        "attachments" => attachments,
+        "icon_url" => ICON_URL
+      }
+
+      uri = URI.parse(SLACK_WEBHOOK)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request = Net::HTTP::Post.new(uri.request_uri, initheader = {'Content-Type' =>'application/json'})
+      request.body = payload.to_json
+      response = http.request(request)
     end
   end
 
