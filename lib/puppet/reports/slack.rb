@@ -71,7 +71,7 @@ Puppet::Reports.register_report(:slack) do
         "username" => SLACK_USERNAME,
         "text" => msg,
         "attachments" => attachments,
-        "icon_url" => ICON_URL
+        "icon_url" => SLACK_ICON_URL
       }
 
       uri = URI.parse(SLACK_WEBHOOK)
