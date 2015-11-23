@@ -43,7 +43,7 @@ Puppet::Reports.register_report(:slack) do
                      end
 
       if PUPPETBOARD_API_HOST != 'UNSET'
-        uri = URI.parse('%s/node/%s' % [ PUPPETBOARD_API_HOST, self.host ] )
+        uri = URI.parse('%s/report/latest/%s' % [ PUPPETBOARD_API_HOST, self.host ] )
         http = Net::HTTP.new(uri.host, uri.port)
         if uri.scheme == 'https' then
           http.use_ssl = true
