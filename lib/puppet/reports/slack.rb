@@ -58,8 +58,8 @@ Puppet::Reports.register_report(:slack) do
         msg += "with status `#{self.status}` at #{Time.now.asctime}"
         attachments = [
           {
-            "fallback" => "<#{PUPPETBOARD_API_HOST}/report/#{self.host}|/#{reportid}|View Report>",
-            "text" => "<#{PUPPETBOARD_API_HOST}/report/#{self.host}|/#{reportid}|View Report>",
+            "fallback" => "<#{PUPPETBOARD_API_HOST}/report/#{self.host}/#{reportid}|View Report>",
+            "text" => "<#{PUPPETBOARD_API_HOST}/report/#{self.host}/#{reportid}|View Report>",
             "color" => status_color
           }
         ]
