@@ -17,6 +17,7 @@ class slack (
   $slack_icon_url = 'https://pbs.twimg.com/profile_images/3672925108/954f7381089ac290b4690c5ffd9dd7d3.png',
   $slack_statuses = [ 'failed', 'changed' ],
   $foreman_api_host = 'UNSET',
+  $puppetboard_api_host = 'UNSET',
   $slack_puppet_dir = '/etc/puppet'
 ){
 

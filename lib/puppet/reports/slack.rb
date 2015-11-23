@@ -20,6 +20,7 @@ Puppet::Reports.register_report(:slack) do
 
   DISABLED_FILE = File.join([File.dirname(Puppet.settings[:config]), 'slack_disabled'])
   FOREMAN_API_HOST = config[:foreman_api_host] || 'UNSET'
+  PUPPETBOARD_API_HOST = config[:puppetboard_api_host] || 'UNSET'
 
   desc <<-DESC
   Send notification of failed reports to a Slack channel.
@@ -40,6 +41,29 @@ Puppet::Reports.register_report(:slack) do
                      when 'changed' then '#4572A7'
                      else '#89A54E'
                      end
+
+      if PUPPETBOARD_API_HOST != 'UNSET'
+        uri = URI.parse('%s/node/%s' % [ PUPPETBOARD_API_HOST, self.host ] )
+        http = Net::HTTP.new(uri.host, uri.port)
+        if uri.scheme == 'https' then
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
+        request = Net::HTTP::Get.new(uri.request_uri)
+        response = http.request(request)
+        location = response['location']
+        reportid = location.split('/').last
+
+        msg = "Puppet run executed on <#{PUPPETBOARD_API_HOST}/node/#{self.host}|#{self.host}> "
+        msg += "with status `#{self.status}` at #{Time.now.asctime}"
+        attachments = [
+          {
+            "fallback" => "<#{PUPPETBOARD_API_HOST}/report/#{self.host}|/#{reportid}|View Report>",
+            "text" => "<#{PUPPETBOARD_API_HOST}/report/#{self.host}|/#{reportid}|View Report>",
+            "color" => status_color
+          }
+        ]
+      end
 
       if FOREMAN_API_HOST != 'UNSET'
         uri = URI.parse('%s/api/hosts/%s/reports/last' % [ FOREMAN_API_HOST, self.host ] )
